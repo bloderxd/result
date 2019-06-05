@@ -26,7 +26,7 @@ fun getResponsesAndHandle() {
   val responseResult = getResponse()
   val responseResult2 = getResponse2()
   if(responseResult == Result.Success && responseResult2 == Result.Success) {
-    handleResponses(responseResult.data, responseResult2.data)
+    println(responseResult.data + responseResult2.data)
   } if(responseResult == Result.Error) {
     handleResponseError(responseResult.errorData)
   } if(responseResult2 == Result.Error) {
@@ -40,7 +40,7 @@ I didn't even put the error state checking there like ```when(responseResult.err
 # Solution
 To avoid results with states, this implementation was created: A way to get operation results with its pure values.
 
-### Result struct
+## Result struct
 
 To demonstrate this `Result` features, let's create an example:
 
@@ -78,3 +78,23 @@ private fun showError() {
 ```
 
 The `get()` method will return for us the pure value (`Data` type in this case) then we don't actually need to check states to see if that result was a success or not, `get()` will decide it and if is not a success it will throw the `Exception` that we tell the result before (`Result.error(NullDataException())`). 
+
+Let's create again our first example but using our implementation of `Result` to show how easy is compare two or more result values:
+
+```kotlin
+data class Response(val number: Int)
+
+fun getResponsesAndHandle() = try {
+  val response = getResponse().get() // fun getResponse(): Result<Response>
+  val response2 = getResponse2().get() // fun getResponse2(): Result<Response>
+  val response3 = getResponse3().get() // fun getResponse3(): Result<Response>
+  val response4 = getResponse4().get() // fun getResponse4(): Result<Response>
+  println(response.number + response2.number + response3.number + response4.number)
+} catch(e: Exception) {
+  handleGenericError()
+}
+```
+
+Here we have a comparation with 4 values and if something goes wrong `handleGenericError()` is called, but sometimes we don't want to handle just a generic error but specifc errors and following this mindset probably the only way to handle that is in `catch()` making a `when(exception) {}` and checking every single `Exception` like `is NullDataException` for example, right? Wrong! Let's compose our errors =)
+
+## Error cases with composition
