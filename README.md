@@ -54,7 +54,7 @@ private fun fetchData(): Result<Data> {
 }
 ```
 
-Ok, here we have a function that get and checks if the data is not null and if it wasn't, returns a `Result` with its data, if is, it returns a `Result` with an `Exception`, and yes: you don't need to specify in `Result` return signment wich `Exception` you want to return like `fun fetchData(): Result<Data, NullDataException>` just declare as `Result<Data>`, return a `Result.error()` with wathever `Exception` you want and you're good to go =)
+Ok, here we have a function that get and checks if the data is not null and if it wasn't, returns a `Result` with its data, if is, it returns a `Result` with an `Exception`, and yes: you don't need to specify in `Result` return assignment which `Exception` you want to return like `fun fetchData(): Result<Data, NullDataException>` just declare as `Result<Data>`, return a `Result.error()` with wathever `Exception` you want and you're good to go.
 
 Let's now unwrap this `Data` value from our `Result` to use in our application:
 
@@ -65,7 +65,7 @@ Let's now unwrap this `Data` value from our `Result` to use in our application:
 private fun handleDataFromRequest() = try {
   showData(fetchData().get())
 } catch(e: Exception) {
-  showError
+  showError()
 }
 
 private fun showData(data: Data) {
@@ -95,6 +95,6 @@ fun getResponsesAndHandle() = try {
 }
 ```
 
-Here we have a comparation with 4 values and if something goes wrong `handleGenericError()` is called, but sometimes we don't want to handle just a generic error but specifc errors and following this mindset probably the only way to handle that is in `catch()` making a `when(exception) {}` and checking every single `Exception` like `is NullDataException` for example, right? Wrong! Let's compose our errors =)
+Here we have a comparation with 4 values and if something goes wrong `handleGenericError()` is called, but sometimes we don't want to handle just a generic error but specifc errors and following this mindset probably the only way to handle that is in `catch()` making a `when(exception) {}` and checking every single `Exception` like `is NullDataException` for example, right? Wrong! Let's compose our errors.
 
 ## Error cases with composition
