@@ -98,3 +98,63 @@ fun getResponsesAndHandle() = try {
 Here we have a comparation with 4 values and if something goes wrong `handleGenericError()` is called, but sometimes we don't want to handle just a generic error but specifc errors and following this mindset probably the only way to handle that is in `catch()` making a `when(exception) {}` and checking every single `Exception` like `is NullDataException` for example, right? Wrong! Let's compose our errors.
 
 ## Error cases with composition
+
+To avoid exceptions checking and turns error handling more linear and decoupled we start to handle it with [composition](https://en.wikipedia.org/wiki/Function_composition_(computer_science)), let's create an example of error handling:
+
+```kotlin
+class ExceptionOne : Exception()
+class ExceptionTwo : Exception()
+class ExceptionThree : Exception()
+
+private fun createResultWith(number: Int): Result<Int> {
+  return if(number == 1) Result.error(ExceptionOne())
+  else if(number == 2) Result.error(ExceptionTwo())
+  else if(number == 3) Result.error(ExceptionThree())
+  else Result.ok(number)
+}
+
+private fun handleExceptionOne(exception: ExceptionOne) = println("Your number cannot be 1")
+private fun handleExceptionTwo(exception: ExceptionTwo) = println("Your number cannot be 2")
+private fun handleExceptionThree(exception: ExceptionThree) = println("Your number cannot be 3")
+
+fun printSumOf(n: Int, n2: Int) = try {
+  val left = createResultWith(n)
+      .composeError(::handleExceptionOne)
+      .composeError(::handleExceptionTwo)
+      .composeError(::handleExceptionThree)
+      
+  val right = createResultWith(n2)
+      .composeError(::handleExceptionOne)
+      .composeError(::handleExceptionTwo)
+      .composeError(::handleExceptionThree)
+      
+  println(left.get() + right.get())
+} catch(e: Exception) {}
+```
+
+This is basically an example that ask for two numbers, transform each of them in results and sum them, but the rule is: the number cannot be 1, 2 or 3:
+
+```kotlin
+printSumOf(4, 1) // Your number cannot be 1
+printSumOf(2, 1) // Your number cannot be 2
+printSumOf(5, 3) // Your number cannot be 3
+printSumOf(5, 5) // 10
+```
+
+Here we're introducing `composeError<MyException> { exception -> }` function that keeps your handling and just execute it if the exception that was throwed is the exception that you specified in `composeError` method, example:
+
+###### Original method syntax
+```kotlin
+createResultWith(n)
+  .composeError<ExceptionOne> { handleExceptionOne(it) } //will be executed if the throwed exception is ExceptionOne
+  .composeError<ExceptionTwo> { handleExceptionTwo(it) } //will be executed if the throwed exception is ExceptionTwo
+  .composeError<ExceptionThree> { handleExceptionThree(it) } //will be executed if the throwed exception is ExceptionThree
+```
+
+###### Kotlin alternative syntax
+```kotlin
+createResultWith(n)
+   .composeError(::handleExceptionOne) //will be executed if the throwed exception is ExceptionOne
+   .composeError(::handleExceptionTwo) //will be executed if the throwed exception is ExceptionTwo
+   .composeError(::handleExceptionThree) //will be executed if the throwed exception is ExceptionThree
+```
