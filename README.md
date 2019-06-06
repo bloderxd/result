@@ -158,3 +158,14 @@ createResultWith(n)
    .composeError(::handleExceptionTwo) //will be executed if the throwed exception is ExceptionTwo
    .composeError(::handleExceptionThree) //will be executed if the throwed exception is ExceptionThree
 ```
+
+## Operators
+Also `Result` implements concepts like `map` and `flatmap`:
+
+```kotlin
+fun getResult(): Result<Int> = Result.ok("1").flatMap(::sum)
+
+private fun sum(number: String): Result<Int> = Result.ok("2").map { it.toInt() + number.toInt() }
+
+println(getResult().get()) // 3
+```
