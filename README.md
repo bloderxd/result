@@ -28,14 +28,22 @@ fun getResponsesAndHandle() {
   if(responseResult == Result.Success && responseResult2 == Result.Success) {
     println(responseResult.data + responseResult2.data)
   } if(responseResult == Result.Error) {
-    handleResponseError(responseResult.errorData)
+    when(responseResult.errorData) {
+       is NetworkException -> {}
+       is XException -> {}
+       is YException -> {}
+    }
   } if(responseResult2 == Result.Error) {
-    handleResponse2Error(responseResult.errorData)
+    when(responseResult2.errorData) {
+       is NetworkException -> {}
+       is XException -> {}
+       is YException -> {}
+    }
   }
 }
 ```
 
-I didn't even put the error state checking there like ```when(responseResult.errorData) {}``` to check what kind of error each result had and it's already really ugly.
+The need to check states let it [not extensible but modifiable](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle)
 
 # Solution
 To avoid results with custom states, this implementation was created: A way to get operation results with its pure values and consider its own values a state.
