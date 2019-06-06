@@ -1,5 +1,5 @@
 # Result
-This is a way to modeling success/error values from operations following a pure unwrapping way of success values and a linear and decoupled error handling way.
+A way to modeling success/error values from operations following a pure unwrapping way of success values and a linear and decoupled error handling way.
 
 # Problem
 `Result` is a name of a struct that helps to get operation values, for example when we need to do a request we can have a success response from the request or an error if something goes wrong. Most of `Result` implementations returns states to check if the operation was success or error like this:
@@ -168,7 +168,7 @@ createResultWith(n)
 ```
 
 ## Operators
-Also `Result` implements concepts like `map` and `flatmap`:
+`Result` also implements concepts like `map` and `flatmap`:
 
 ```kotlin
 fun getResult(): Result<Int> = Result.ok("1").flatMap(::sum)
