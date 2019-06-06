@@ -38,7 +38,7 @@ fun getResponsesAndHandle() {
 I didn't even put the error state checking there like ```when(responseResult.errorData) {}``` to check what kind of error each result had and it's already really ugly.
 
 # Solution
-To avoid results with states, this implementation was created: A way to get operation results with its pure values.
+To avoid results with custom states, this implementation was created: A way to get operation results with its pure values and consider its own values a state.
 
 ## Result struct
 
