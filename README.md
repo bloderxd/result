@@ -177,3 +177,20 @@ private fun sum(number: String): Result<Int> = Result.ok("2").map { it.toInt() +
 
 println(getResult().get()) // 3
 ```
+
+# Import
+
+###### Gradle
+```groovy
+implementation 'bloder.com:result:0.0.1'
+```
+
+###### Maven
+```xml
+<dependency>
+	<groupId>bloder.com</groupId>
+	<artifactId>result</artifactId>
+	<version>0.0.1</version>
+	<type>pom</type>
+</dependency>
+```
