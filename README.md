@@ -182,7 +182,7 @@ println(getResult().get()) // 3
 
 ###### Gradle
 ```groovy
-implementation 'bloder.com:result:0.0.1'
+implementation 'bloder.com:result:0.0.2'
 ```
 
 ###### Maven
@@ -190,7 +190,7 @@ implementation 'bloder.com:result:0.0.1'
 <dependency>
 	<groupId>bloder.com</groupId>
 	<artifactId>result</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<type>pom</type>
 </dependency>
 ```
