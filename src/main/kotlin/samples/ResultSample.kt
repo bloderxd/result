@@ -1,6 +1,6 @@
 package samples
 
-import Result
+import result.Result
 
 internal fun sum(result1: Result<Int>, result2: Result<Int>): Int = try {
     result1.get() + result2.get()

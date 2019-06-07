@@ -1,3 +1,5 @@
+package result
+
 inline class Result<out T>(@PublishedApi internal val value: Any?) {
 
     companion object {
@@ -26,17 +28,17 @@ inline class Result<out T>(@PublishedApi internal val value: Any?) {
     }
 
     inline fun <R> map(transform: (T) -> R) : Result<R> = when(value) {
-        is Result.Failure -> Result(value)
-        else -> Result.ok(transform(value as T))
+        is Failure -> Result(value)
+        else -> ok(transform(value as T))
     }
 
     inline fun <R> flatMap(transform: (T) -> Result<R>) : Result<R> = when(value) {
-        is Result.Failure -> Result(value)
+        is Failure -> Result(value)
         else -> transform(value as T)
     }
 
     inline fun <reified R : Exception> composeError(crossinline function: (R) -> Unit) : Result<T> = when(value) {
-        is Result.Failure -> this.also { value.handleExceptionWith(function) }
+        is Failure -> this.also { value.handleExceptionWith(function) }
         else -> this
     }
 }
